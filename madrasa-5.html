@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Madrasa Software</title>
+<style>
+*{box-sizing:border-box}
+:root{--g:#146c43;--d:#0b4a2e;--gold:#b8932f;--bg:#eef3ef}
+body{margin:0;background:var(--bg);font-family:'Noto Naskh Arabic','Noto Nastaliq Urdu',Tahoma,Arial,sans-serif;color:#222;font-size:15px}
+body.Len{font-family:Arial,Helvetica,sans-serif}
+.top{background:var(--g);color:#fff;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+#topname{font-size:17px;font-weight:bold}
+.lb{display:flex;gap:4px;flex:none}
+.lb button{border:1px solid #9cd;background:none;color:#fff;padding:5px 8px;border-radius:6px;font-size:13px}
+.lb button.on{background:#fff;color:var(--g);font-weight:bold}
+.tabs{display:flex;background:var(--d);position:sticky;top:0;z-index:20;overflow-x:auto}
+.tabs button{flex:1 0 auto;padding:11px 12px;border:0;background:none;color:#cfe;font-size:13px;font-family:inherit;white-space:nowrap}
+.tabs button.on{background:var(--bg);color:var(--g);font-weight:bold}
+.tab{display:none;padding:12px;max-width:900px;margin:auto}.tab.on{display:block}
+.card{background:#fff;border-radius:10px;padding:12px;margin-bottom:12px;box-shadow:0 1px 3px #0002}
+.card h3{margin:0 0 4px;color:var(--g);font-size:16px}
+label{display:block;font-size:13px;margin:9px 0 3px;color:#555}
+input,select,textarea{width:100%;padding:9px;border:1px solid #bbb;border-radius:6px;font-size:15px;font-family:inherit;background:#fff}
+input[type=checkbox]{width:auto}
+.chk{display:flex;align-items:center;gap:8px;margin-top:10px}.chk label{margin:0}
+.b{background:var(--g);color:#fff;border:0;padding:10px 14px;border-radius:6px;font-size:15px;margin:8px 0 0;margin-inline-end:6px;font-family:inherit}
+.b.r{background:#b02a37}.b.g{background:#555}.b.s{padding:6px 10px;margin:0;font-size:13px}
+.row{display:flex;gap:8px}.row>*{flex:1;min-width:0}
+.sc{overflow-x:auto}
+.mkt{border-collapse:collapse;width:100%}
+.mkt th,.mkt td{border:1px solid #999;padding:4px;text-align:center;font-size:13px;white-space:nowrap}
+.mkt th{background:#e5efe8}
+.mkt input{padding:5px;text-align:center;width:70px}
+.mkt input.rl{width:56px}.mkt input.nm{width:130px}
+.pill{display:inline-block;background:#e5efe8;padding:5px 10px;border-radius:14px;margin:4px 0;margin-inline-end:6px;font-size:14px}
+.pill a,.x{color:#b02a37;cursor:pointer;font-weight:bold;padding:0 4px}
+.ql{display:flex;gap:6px;align-items:center;border-bottom:1px solid #ddd;padding:6px 0}
+.ql span.t{flex:1;min-width:0;word-break:break-word}
+.ql.h span.t{font-weight:bold;color:var(--g)}
+.hint,.small{font-size:12px;color:#777;margin:6px 0 0}
+.empty{background:#fff;padding:16px;border-radius:10px;text-align:center;color:#777}
+.pv{margin:6px 2px;font-weight:bold;color:var(--g)}
+.mkt input.dt{width:135px}.mkt input.w{width:95px}
+.rlist{max-height:260px;overflow-y:auto;margin-top:8px}
+.ql.st{cursor:pointer}.ql.st.sel{background:#e5efe8}
+.bd{font-size:12px;padding:2px 8px;border-radius:10px;color:#fff;flex:none}
+.bd.p{background:var(--g)}.bd.w{background:#b02a37}
+.ftot{margin-top:8px;font-weight:bold;color:var(--d);font-size:14px}
+h4{margin:12px 0 0;color:var(--g)}
+.sx.g{color:#146c43;font-weight:bold}.sx.r{color:#b02a37}.sx.o{color:#b8610a}
+.mkt .sx{font-size:12px}
+
+/* ---------- documents ---------- */
+.sheet{background:#fff;border:3px solid var(--g);padding:5px;margin:12px 0;position:relative;box-shadow:0 2px 8px #0003;overflow:hidden;color:#111;
+ -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.sheet *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.sheet .in{border:1px solid var(--gold);padding:16px 14px;min-height:320px;position:relative;z-index:1}
+.sheet.f-ur{font-family:'Noto Nastaliq Urdu','Jameel Noori Nastaleeq','Alvi Nastaleeq','Noto Naskh Arabic',Tahoma,serif;line-height:2.1}
+.sheet.f-ar{font-family:'Amiri','Traditional Arabic','Noto Naskh Arabic',Tahoma,serif;line-height:1.8;font-size:16px}
+.sheet.f-en{font-family:Georgia,'Times New Roman',serif;line-height:1.5}
+.wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:58%;max-height:70%;object-fit:contain;opacity:.09;z-index:0;pointer-events:none}
+#gwm{display:none}
+.hdr{display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:3px double var(--g);padding-bottom:8px}
+.hdr .lg{width:84px;height:84px;object-fit:contain;flex:none}
+.hdr .lgs{width:84px;flex:none}
+.hm{flex:1;text-align:center;min-width:0}
+.hm .bis{font-family:'Amiri','Noto Naskh Arabic','Traditional Arabic',serif;direction:rtl;color:var(--gold);font-size:19px;line-height:1.6}
+.hm h1{margin:2px 0;color:var(--d);font-size:26px;line-height:1.5;word-break:break-word}
+.hm .ad{font-size:13px;color:#444}
+.rib{text-align:center;margin:12px 0 14px;position:relative}
+.rib:before{content:"";position:absolute;top:50%;left:0;right:0;border-top:1px solid var(--gold)}
+.rib span{position:relative;display:inline-block;background:var(--g);color:#fff;padding:3px 26px;border-radius:22px;border:2px solid var(--gold);font-weight:bold;font-size:17px;line-height:1.7}
+.sheet table{width:100%;border-collapse:collapse}
+.sheet th{background:var(--g);color:#fff;border:1px solid var(--d);padding:5px 6px;font-size:14px}
+.sheet td{border:1px solid #777;padding:4px 6px;text-align:center;font-size:14px}
+.sheet tr:nth-child(even) td{background:rgba(20,108,67,.07)}
+.sheet table.info{margin-bottom:12px}
+.sheet table.info td{text-align:start;border:1px solid var(--gold);background:rgba(184,147,47,.10)}
+.sheet td.l{text-align:start}
+.sheet .sx.g{color:#146c43;font-weight:bold}.sheet .sx.r{color:#b02a37}.sheet .sx.o{color:#b8610a}
+.sheet.rc .in{min-height:240px}
+.q{display:flex;gap:8px;margin:8px 0;align-items:flex-start}
+.q .qn{font-weight:bold;min-width:28px;color:var(--d)}
+.q .qt{flex:1;word-break:break-word}
+.q .qm{font-weight:bold;white-space:nowrap}
+.sec{text-align:center;margin:16px 0 6px}
+.sec span{border-bottom:2px solid var(--gold);padding:0 16px 2px;color:var(--d);font-weight:bold;font-size:17px}
+.ins{border:1px dashed var(--gold);padding:4px 10px;margin:6px 0 10px;border-radius:6px;font-size:14px}
+.orn{text-align:center;color:var(--gold);letter-spacing:8px;margin-top:18px}
+.sum{display:flex;gap:8px;margin:16px 0}
+.sum div{flex:1;border:2px solid var(--gold);border-radius:8px;text-align:center;padding:4px;background:rgba(184,147,47,.08)}
+.sum small{display:block;color:#555;font-size:12px}.sum b{font-size:18px;color:var(--d)}
+.sig{display:flex;justify-content:space-between;gap:10px;margin-top:60px;font-size:14px}
+.sig div{border-top:1px solid #000;padding-top:2px;width:28%;text-align:center}
+.ms.dense table th,.ms.dense table td{font-size:11px;padding:3px}
+@media(max-width:520px){.hm h1{font-size:20px}.hdr .lg,.hdr .lgs{width:56px;height:56px}.sheet .in{padding:10px 8px}}
+
+@page{size:A4 portrait;margin:10mm}
+@page ms{size:A4 landscape;margin:10mm}
+@media print{
+ body{background:#fff}
+ .noprint,.top,.tabs,.empty{display:none!important}
+ .tab{display:none!important}.tab.on{display:block!important;padding:0;max-width:none}
+ .sheet{box-shadow:none;margin:0;background:none;overflow:visible;break-after:page;page-break-after:always}
+ .sheet:last-child{break-after:auto;page-break-after:auto}
+ .sheet .in{min-height:262mm}
+ .sheet.ms{page:ms}.sheet.ms .in{min-height:176mm}
+ .sheet.rc .in{min-height:110mm}
+ .wm{display:none!important}
+ #gwm.has{display:block;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:120mm;max-height:120mm;object-fit:contain;opacity:.1;z-index:0}
+}
+</style>
+</head>
+<body class="Lur">
+<div class="top noprint">
+ <span id="topname"></span>
+ <span class="lb">
+  <button id="lb-ur" onclick="setLang('ur')">اردو</button>
+  <button id="lb-ar" onclick="setLang('ar')">العربية</button>
+  <button id="lb-en" onclick="setLang('en')">English</button>
+ </span>
+</div>
+<div class="tabs">
+ <button id="tb0" class="on" onclick="go(0)">⚙️ <span data-i="tSetup"></span></button>
+ <button id="tb4" onclick="go(4)">📒 <span data-i="tReg"></span></button>
+ <button id="tb5" onclick="go(5)">💰 <span data-i="tFee"></span></button>
+ <button id="tb1" onclick="go(1)">📝 <span data-i="tPaper"></span></button>
+ <button id="tb2" onclick="go(2)">📊 <span data-i="tMarks"></span></button>
+ <button id="tb3" onclick="go(3)">🎓 <span data-i="tDmc"></span></button>
+</div>
+<img id="gwm" alt="">
+
+<!-- SETUP -->
+<div class="tab on" id="t0">
+ <div class="card noprint">
+  <h3 data-i="mInfo"></h3>
+  <label data-i="mName"></label><input id="name" oninput="sv()">
+  <label data-i="mAddr"></label><input id="addr" oninput="sv()">
+  <label data-i="cur"></label><input id="cur" oninput="sv()">
+  <label data-i="mLogo"></label>
+  <input type="file" id="logof" accept="image/*" hidden onchange="logo(this)"><button class="b" onclick="$('logof').click()" data-i="chooseLogo"></button>
+  <div style="margin-top:8px"><img id="lp" alt="" style="height:80px;max-width:100%;display:none"></div>
+  <button class="b r" onclick="rmlogo()" data-i="rmLogo"></button>
+  <p class="hint" data-i="logoHint"></p>
+  <div class="chk"><input type="checkbox" id="bism" onchange="sv()"><label for="bism" data-i="bism"></label></div>
+  <label data-i="docLang"></label>
+  <select id="dl" onchange="setDl(this.value)">
+   <option value="ur">اردو</option><option value="ar">العربية</option><option value="en">English</option>
+  </select>
+ </div>
+ <div class="card noprint">
+  <h3 data-i="bkTitle"></h3>
+  <button class="b g" onclick="bk()" data-i="bkDl"></button>
+  <button class="b g" onclick="shareBk()" data-i="shareBk"></button>
+  <input type="file" id="rsf" accept=".json,application/json" hidden onchange="rs(this)"><button class="b" onclick="$('rsf').click()" data-i="chooseBackup"></button>
+  <p class="hint" data-i="bkRs"></p>
+ </div>
+</div>
+
+<!-- PAPER -->
+<div class="tab" id="t1">
+ <div class="card noprint">
+  <h3 data-i="pMake"></h3>
+  <div class="row"><div><label data-i="exam"></label><input id="pex" oninput="sv()"></div>
+  <div><label data-i="cls"></label><input id="pcl" oninput="sv()"></div></div>
+  <div class="row"><div><label data-i="subj"></label><input id="psu" oninput="sv()"></div>
+  <div><label data-i="time"></label><input id="ptm" oninput="sv()"></div></div>
+  <label data-i="date"></label><input id="pdt" oninput="sv()">
+  <label data-i="ins"></label><input id="pins" oninput="sv()">
+  <hr>
+  <label data-i="newQ"></label><textarea id="qt" rows="3" data-p="qPh"></textarea>
+  <label data-i="qMarks"></label><input id="qm" type="number" inputmode="decimal" min="0" value="5">
+  <button class="b" onclick="addQ(false)" data-i="addQ"></button>
+  <button class="b g" onclick="addQ(true)" data-i="addH"></button>
+  <h3 style="margin-top:14px" data-i="qList"></h3>
+  <div id="ql"></div>
+  <button class="b g" onclick="pr()" data-i="printPdf"></button>
+  <p class="hint" data-i="printHint"></p>
+ </div>
+ <div class="pv noprint" data-i="preview"></div>
+ <div id="pout"></div>
+</div>
+
+<!-- MARKS -->
+<div class="tab" id="t2">
+ <div class="card noprint">
+  <h3 data-i="eSet"></h3>
+  <div class="row"><div><label data-i="exam"></label><input id="mex" oninput="sv()"></div>
+  <div><label data-i="cls"></label><input id="mcl" oninput="sv()"></div></div>
+  <label data-i="session"></label><input id="mse" oninput="sv()">
+  <hr>
+  <h3 data-i="subs"></h3>
+  <label data-i="subName"></label><input id="sn">
+  <div class="row"><div><label data-i="subTot"></label><input id="st" type="number" inputmode="decimal" min="1" value="100"></div>
+  <div><label data-i="subPass"></label><input id="sp" type="number" inputmode="decimal" min="0" value="33"></div></div>
+  <button class="b" onclick="addS()" data-i="addSub"></button>
+  <div id="sl"></div>
+  <hr>
+  <h3 data-i="stus"></h3>
+  <div class="row"><div><label data-i="roll"></label><input id="rn"></div>
+  <div><label data-i="sname"></label><input id="nm"></div></div>
+  <label data-i="father"></label><input id="fn">
+  <button class="b" onclick="addT()" data-i="addStu"></button>
+ </div>
+ <div class="card noprint">
+  <h3 data-i="enter"></h3>
+  <label data-i="cls"></label><select id="mfc" onchange="setMf(this.value)"></select>
+  <div class="sc"><table class="mkt" id="mt"></table></div>
+  <button class="b g" onclick="pr()" data-i="printPdf"></button>
+  <p class="hint" data-i="printHint"></p>
+ </div>
+ <div class="pv noprint" data-i="preview"></div>
+ <div id="mout"></div>
+</div>
+
+<!-- DMC -->
+<div class="tab" id="t3">
+ <div class="card noprint">
+  <h3 data-i="tDmc"></h3>
+  <label data-i="dmcSel"></label><select id="ds" onchange="dmAll=false;dm()"></select>
+  <button class="b" onclick="dmAll=false;dm()" data-i="dmcOne"></button>
+  <button class="b" onclick="dmAll=true;dm()" data-i="dmcAll"></button>
+  <button class="b g" onclick="pr()" data-i="printPdf"></button>
+  <p class="hint" data-i="printHint"></p>
+ </div>
+ <div class="pv noprint" data-i="preview"></div>
+ <div id="dout"></div>
+</div>
+
+<!-- REGISTER -->
+<div class="tab" id="t4">
+ <div class="card noprint">
+  <h3 data-i="regTitle"></h3>
+  <div class="row"><div><label data-i="admNo"></label><input id="ra"></div>
+  <div><label data-i="cls"></label><input id="rcl"></div></div>
+  <div class="row"><div><label data-i="sname"></label><input id="rnm"></div>
+  <div><label data-i="father"></label><input id="rfn"></div></div>
+  <button class="b" onclick="addR()" data-i="addStu"></button>
+  <hr>
+  <div class="row"><input id="rsq" data-p="search" oninput="rl();renderPrev()">
+  <select id="rf" onchange="rl();renderPrev()"><option value="" data-i="fAll"></option><option value="p" data-i="fPresent"></option><option value="w" data-i="fWd"></option></select></div>
+  <div id="rlist" class="rlist"></div>
+  <p class="hint" data-i="selStu"></p>
+ </div>
+ <div class="card noprint" id="redit" style="display:none">
+  <h3 id="rtitle"></h3>
+  <div class="row"><div><label data-i="admNo"></label><input id="e_a" oninput="setF('a',this.value)"></div>
+  <div><label data-i="roll"></label><input id="e_r" oninput="setF('r',this.value)"></div></div>
+  <label data-i="sname"></label><input id="e_n" oninput="setF('n',this.value)">
+  <label data-i="father"></label><input id="e_f" oninput="setF('f',this.value)">
+  <div class="row"><div><label data-i="cls"></label><input id="e_c" oninput="setF('c',this.value)"></div>
+  <div><label data-i="dob"></label><input type="date" id="e_b" onchange="setF('b',this.value)"></div></div>
+  <div class="row"><div><label data-i="phone"></label><input id="e_p" oninput="setF('p',this.value)"></div>
+  <div><label data-i="admDate"></label><input type="date" id="e_d" onchange="setF('d',this.value)"></div></div>
+  <label data-i="sAddr"></label><input id="e_ad" oninput="setF('ad',this.value)">
+  <label data-i="mfee"></label><input type="number" inputmode="decimal" step="any" min="0" id="e_fee" oninput="setF('fee',this.value)">
+  <label data-i="notes"></label><input id="e_nt" oninput="setF('nt',this.value)">
+  <h4 data-i="wdSec"></h4>
+  <div class="row"><div><label data-i="wdDate"></label><input type="date" id="e_wd" onchange="setF('wd',this.value)"></div>
+  <div><label data-i="wdCls"></label><input id="e_wc" oninput="setF('wc',this.value)"></div></div>
+  <label data-i="wdReason"></label><input id="e_wr" oninput="setF('wr',this.value)">
+  <label data-i="wdConduct"></label><input id="e_wg" oninput="setF('wg',this.value)">
+  <label data-i="wdRemarks"></label><input id="e_wn" oninput="setF('wn',this.value)">
+  <button class="b" onclick="wdToday()" data-i="wdToday"></button>
+  <button class="b g" onclick="readmit()" data-i="readmit"></button>
+  <button class="b r" onclick="delStu(SEL)" data-i="delStu"></button>
+ </div>
+ <div class="card noprint">
+  <button class="b" onclick="showReg()" data-i="showReg"></button>
+  <button class="b" onclick="showCert()" data-i="printCert"></button>
+  <button class="b g" onclick="pr()" data-i="printPdf"></button>
+  <p class="hint" data-i="printHint"></p>
+ </div>
+ <div class="pv noprint" data-i="preview"></div>
+ <div id="rout"></div>
+</div>
+
+<!-- FEES -->
+<div class="tab" id="t5">
+ <div class="card noprint">
+  <h3 data-i="tFee"></h3>
+  <button class="b" id="fvm" onclick="setFV('m')" data-i="fModeM"></button>
+  <button class="b g" id="fvl" onclick="setFV('l')" data-i="fModeL"></button>
+  <label data-i="cls"></label><select id="fcl" onchange="fr();fprev()"></select>
+  <div id="fmc"><label data-i="fMonth"></label><input type="month" id="fm" onchange="fr();fprev()"></div>
+  <div id="flc" style="display:none">
+   <label data-i="dmcSel"></label><select id="fs" onchange="lr()"></select>
+   <div class="row"><div><label data-i="fFrom"></label><input type="month" id="lf" onchange="fr();fprev()"></div>
+   <div><label data-i="fTo"></label><input type="month" id="lt" onchange="fr();fprev()"></div></div>
+   <button class="b" onclick="FP='led';fprev()" data-i="fLedgerOne"></button>
+   <button class="b" onclick="FP='all';fprev()" data-i="fLedgerAll"></button>
+  </div>
+  <p class="hint" data-i="fSaved"></p>
+ </div>
+ <div class="card noprint">
+  <h3 data-i="fEnter"></h3>
+  <div class="sc"><table class="mkt" id="ft"></table></div>
+  <div id="ftot" class="ftot"></div>
+  <button class="b" id="fvr" onclick="FP='rep';fprev()" data-i="fMonthRep"></button>
+  <button class="b g" onclick="pr()" data-i="printPdf"></button>
+  <p class="hint" data-i="printHint"></p>
+ </div>
+ <div class="pv noprint" data-i="preview"></div>
+ <div id="fout"></div>
+</div>
+
+<script>
+"use strict";
+var D={
+en:{appTitle:"Madrasa Software",tSetup:"Setup",tPaper:"Paper",tMarks:"Marks Sheet",tDmc:"DMC",
+docLang:"Language of printed documents (paper, marks sheet, DMC)",
+mInfo:"Madrasa details",mName:"Madrasa name",mAddr:"Address / Phone",mLogo:"Logo (choose from phone)",rmLogo:"Remove logo",
+logoHint:"The logo appears at the top and as a light watermark in the background of every page.",bism:"Show Bismillah at the top",
+bkTitle:"Backup",bkDl:"Download data",bkRs:"Download or share a backup first, then pick the file here whenever you need to restore.",rsOk:"Data restored",rsBad:"Invalid file",
+pMake:"Make question paper",exam:"Exam name",cls:"Class",subj:"Subject",time:"Time allowed",date:"Date",ins:"Instructions (optional)",
+newQ:"Question / heading text",qMarks:"Marks",addQ:"+ Add question",addH:"+ Add section heading",qPh:"Write here",qList:"Questions",
+noQ:"No questions yet",preview:"Preview",printPdf:"Save as PDF / Print",printHint:"After pressing, choose Save as PDF in the print window.",
+eSet:"Exam settings",session:"Session / Year",subs:"Subjects",subName:"Subject name",subTot:"Total marks",subPass:"Pass marks",addSub:"+ Add subject",
+stus:"Students",roll:"Roll No",sname:"Name",father:"Father's name",addStu:"+ Add student",enter:"Enter marks",needSub:"Add subjects and students first",
+dmcSel:"Select student",dmcOne:"Show this DMC",dmcAll:"Show all DMCs",conf:"Delete? Are you sure?",full:"Storage is full. Use a smaller logo.",
+msTitle:"Marks Sheet",dmcTitle:"Detailed Marks Certificate",pTitle:"Question Paper",total:"Total",totalM:"Total marks",obt:"Obtained",pct:"Percentage",
+grade:"Grade",pos:"Position",res:"Result",pass:"Pass",fail:"Fail",passed:"Successful",failed:"Unsuccessful",sno:"#",tchr:"Class Teacher",head:"Principal",stamp:"Stamp",insD:"Instructions",
+tReg:"Register",tFee:"Fees",cur:"Currency (e.g. Rs)",regTitle:"Student register (admission & withdrawal)",search:"Search",fAll:"All",fPresent:"Present",fWd:"Withdrawn",allCls:"All classes",
+admNo:"Admission No",dob:"Date of birth",phone:"Phone",sAddr:"Address",admDate:"Admission date",mfee:"Monthly fee",notes:"Notes",wdSec:"Withdrawal details",wdDate:"Withdrawal date",
+wdCls:"Class at leaving",wdReason:"Reason",wdConduct:"Conduct",wdRemarks:"Remarks",wdToday:"Withdraw today",readmit:"Re-admit",selStu:"Select a student from the list",showReg:"Show register",
+printCert:"Leaving certificate",regDocTitle:"Admission & Withdrawal Register",certTitle:"Withdrawal Certificate",status:"Status",delStu:"Delete student",
+fMonth:"Month",fModeM:"Monthly collection",fModeL:"Student fee record",fDue:"Due",fPaid:"Paid",stPaid:"Paid",stPart:"Partial",stUnpaid:"Unpaid",fDate:"Paid on",fRcpt:"Receipt No",fBal:"Balance",
+fFrom:"From month",fTo:"To month",fCollected:"Collected",fRemain:"Remaining",fMonthRep:"Show monthly report",fLedgerOne:"Show this student's record",fLedgerAll:"Show all students' records",
+fRepTitle:"Monthly Fee Report",fLedTitle:"Student Fee Record",fRecTitle:"Fee Receipt",fPeriod:"Period",fNoStu:"No students found",
+fSaved:"Every entry is saved automatically on this device. Pick any month to see its record.",fEnter:"Fee entries",fCashier:"Cashier",chooseLogo:"Choose logo",chooseBackup:"Restore from backup file",shareBk:"Share backup"},
+ur:{appTitle:"مدرسہ سافٹ ویئر",tSetup:"ترتیبات",tPaper:"پرچہ",tMarks:"مارکس شیٹ",tDmc:"ڈی ایم سی",
+docLang:"چھپنے والے کاغذات کی زبان (پرچہ، مارکس شیٹ، ڈی ایم سی)",
+mInfo:"مدرسے کی معلومات",mName:"مدرسے کا نام",mAddr:"پتہ / فون",mLogo:"لوگو (موبائل سے منتخب کریں)",rmLogo:"لوگو ہٹائیں",
+logoHint:"لوگو ہر صفحے کے اوپر اور ہلکے پس منظر (واٹر مارک) میں نظر آئے گا۔",bism:"اوپر بسم اللہ دکھائیں",
+bkTitle:"بیک اپ",bkDl:"ڈیٹا ڈاؤن لوڈ کریں",bkRs:"پہلے بیک اپ شیئر یا ڈاؤن لوڈ کر لیں، پھر ضرورت پر فائل منتخب کر کے ڈیٹا واپس لائیں۔",rsOk:"ڈیٹا واپس آ گیا",rsBad:"فائل درست نہیں",
+pMake:"پرچہ بنائیں",exam:"امتحان کا نام",cls:"جماعت",subj:"مضمون",time:"وقت",date:"تاریخ",ins:"ہدایات (اختیاری)",
+newQ:"سوال / عنوان کا متن",qMarks:"نمبر",addQ:"+ سوال شامل کریں",addH:"+ حصے کا عنوان شامل کریں",qPh:"یہاں لکھیں",qList:"سوالات",
+noQ:"ابھی کوئی سوال نہیں",preview:"پیش منظر",printPdf:"پی ڈی ایف محفوظ کریں / پرنٹ",printHint:"دبانے کے بعد پرنٹ ونڈو میں «پی ڈی ایف کے طور پر محفوظ کریں» منتخب کریں۔",
+eSet:"امتحان کی ترتیب",session:"سال / سیشن",subs:"مضامین",subName:"مضمون کا نام",subTot:"کل نمبر",subPass:"پاسنگ نمبر",addSub:"+ مضمون شامل کریں",
+stus:"طلبہ",roll:"رول نمبر",sname:"نام",father:"والد کا نام",addStu:"+ طالب علم شامل کریں",enter:"نمبر لکھیں",needSub:"پہلے مضامین اور طلبہ شامل کریں",
+dmcSel:"طالب علم منتخب کریں",dmcOne:"یہ ڈی ایم سی دکھائیں",dmcAll:"سب کی ڈی ایم سی دکھائیں",conf:"کیا آپ واقعی حذف کرنا چاہتے ہیں؟",full:"جگہ ختم ہو گئی، چھوٹا لوگو استعمال کریں۔",
+msTitle:"مارکس شیٹ",dmcTitle:"تفصیلی نمبرات سرٹیفکیٹ",pTitle:"سوالیہ پرچہ",total:"میزان",totalM:"کل نمبر",obt:"حاصل کردہ",pct:"فیصد",
+grade:"گریڈ",pos:"پوزیشن",res:"نتیجہ",pass:"پاس",fail:"فیل",passed:"کامیاب",failed:"ناکام",sno:"نمبر",tchr:"کلاس ٹیچر",head:"مہتمم",stamp:"مہر",insD:"ہدایات",
+tReg:"رجسٹر",tFee:"فیس",cur:"کرنسی (مثلاً Rs)",regTitle:"طلبہ رجسٹر (داخلہ اور خارج)",search:"تلاش",fAll:"سب",fPresent:"موجود",fWd:"خارج شدہ",allCls:"تمام جماعتیں",
+admNo:"داخلہ نمبر",dob:"تاریخ پیدائش",phone:"فون",sAddr:"پتہ",admDate:"تاریخ داخلہ",mfee:"ماہانہ فیس",notes:"نوٹ",wdSec:"خارج ہونے کی تفصیل",wdDate:"تاریخ خارج",
+wdCls:"خارج ہوتے وقت جماعت",wdReason:"وجہ",wdConduct:"چال چلن",wdRemarks:"ریمارکس",wdToday:"آج خارج کریں",readmit:"دوبارہ داخل کریں",selStu:"فہرست سے طالب علم منتخب کریں",showReg:"رجسٹر دکھائیں",
+printCert:"تصدیق نامہ خارج",regDocTitle:"رجسٹر داخل خارج",certTitle:"تصدیق نامہ خارج",status:"حیثیت",delStu:"طالب علم حذف کریں",
+fMonth:"مہینہ",fModeM:"ماہانہ وصولی",fModeL:"طالب علم کا فیس ریکارڈ",fDue:"واجب",fPaid:"ادا شدہ",stPaid:"ادا",stPart:"جزوی",stUnpaid:"باقی",fDate:"تاریخ ادائیگی",fRcpt:"رسید نمبر",fBal:"بقایا",
+fFrom:"از مہینہ",fTo:"تا مہینہ",fCollected:"وصول شدہ",fRemain:"باقی",fMonthRep:"ماہانہ رپورٹ دکھائیں",fLedgerOne:"اس طالب علم کا ریکارڈ دکھائیں",fLedgerAll:"سب طلبہ کا ریکارڈ دکھائیں",
+fRepTitle:"ماہانہ فیس رپورٹ",fLedTitle:"طالب علم کا فیس ریکارڈ",fRecTitle:"فیس رسید",fPeriod:"مدت",fNoStu:"کوئی طالب علم نہیں ملا",
+fSaved:"ہر اندراج خود بخود اس ڈیوائس میں محفوظ ہو جاتا ہے۔ کوئی بھی مہینہ چن کر اس کا ریکارڈ دیکھیں۔",fEnter:"فیس اندراج",fCashier:"محاسب",chooseLogo:"لوگو منتخب کریں",chooseBackup:"بیک اپ فائل سے ڈیٹا واپس لائیں",shareBk:"بیک اپ شیئر کریں"},
+ar:{appTitle:"برنامج المدرسة",tSetup:"الإعدادات",tPaper:"ورقة الأسئلة",tMarks:"كشف الدرجات",tDmc:"شهادة الدرجات",
+docLang:"لغة الأوراق المطبوعة (الأسئلة، كشف الدرجات، الشهادة)",
+mInfo:"بيانات المدرسة",mName:"اسم المدرسة",mAddr:"العنوان / الهاتف",mLogo:"الشعار (اختر من الهاتف)",rmLogo:"حذف الشعار",
+logoHint:"يظهر الشعار أعلى كل صفحة وكعلامة مائية خفيفة في الخلفية.",bism:"إظهار البسملة في الأعلى",
+bkTitle:"نسخة احتياطية",bkDl:"تنزيل البيانات",bkRs:"احفظ نسخة احتياطية أو شاركها أولاً، ثم اختر الملف عند الحاجة لاستعادة البيانات.",rsOk:"تمت استعادة البيانات",rsBad:"ملف غير صالح",
+pMake:"إعداد ورقة الأسئلة",exam:"اسم الاختبار",cls:"الصف",subj:"المادة",time:"الزمن",date:"التاريخ",ins:"التعليمات (اختياري)",
+newQ:"نص السؤال / العنوان",qMarks:"الدرجة",addQ:"+ إضافة سؤال",addH:"+ إضافة عنوان قسم",qPh:"اكتب هنا",qList:"الأسئلة",
+noQ:"لا توجد أسئلة بعد",preview:"معاينة",printPdf:"حفظ PDF / طباعة",printHint:"بعد الضغط اختر «حفظ كملف PDF» في نافذة الطباعة.",
+eSet:"إعدادات الاختبار",session:"السنة / الدورة",subs:"المواد",subName:"اسم المادة",subTot:"الدرجة الكلية",subPass:"درجة النجاح",addSub:"+ إضافة مادة",
+stus:"الطلاب",roll:"رقم الجلوس",sname:"الاسم",father:"اسم الأب",addStu:"+ إضافة طالب",enter:"إدخال الدرجات",needSub:"أضف المواد والطلاب أولاً",
+dmcSel:"اختر الطالب",dmcOne:"عرض هذه الشهادة",dmcAll:"عرض شهادات الجميع",conf:"هل أنت متأكد من الحذف؟",full:"المساحة ممتلئة، استخدم شعارًا أصغر.",
+msTitle:"كشف الدرجات",dmcTitle:"شهادة الدرجات التفصيلية",pTitle:"ورقة الأسئلة",total:"المجموع",totalM:"الدرجة الكلية",obt:"الدرجة المحصلة",pct:"النسبة المئوية",
+grade:"التقدير",pos:"الترتيب",res:"النتيجة",pass:"ناجح",fail:"راسب",passed:"ناجح",failed:"راسب",sno:"م",tchr:"معلم الصف",head:"مدير المدرسة",stamp:"الختم",insD:"التعليمات",
+tReg:"السجل",tFee:"الرسوم",cur:"العملة (مثل Rs)",regTitle:"سجل الطلاب (القيد والانسحاب)",search:"بحث",fAll:"الكل",fPresent:"الحاضرون",fWd:"المنسحبون",allCls:"كل الصفوف",
+admNo:"رقم القيد",dob:"تاريخ الميلاد",phone:"الهاتف",sAddr:"العنوان",admDate:"تاريخ القيد",mfee:"الرسوم الشهرية",notes:"ملاحظات",wdSec:"بيانات الانسحاب",wdDate:"تاريخ الانسحاب",
+wdCls:"الصف عند الانسحاب",wdReason:"السبب",wdConduct:"السلوك",wdRemarks:"ملاحظات",wdToday:"انسحاب اليوم",readmit:"إعادة القيد",selStu:"اختر طالباً من القائمة",showReg:"عرض السجل",
+printCert:"شهادة انسحاب",regDocTitle:"سجل القيد والانسحاب",certTitle:"شهادة انسحاب",status:"الحالة",delStu:"حذف الطالب",
+fMonth:"الشهر",fModeM:"التحصيل الشهري",fModeL:"سجل رسوم الطالب",fDue:"المستحق",fPaid:"المدفوع",stPaid:"مدفوع",stPart:"جزئي",stUnpaid:"غير مدفوع",fDate:"تاريخ الدفع",fRcpt:"رقم الإيصال",fBal:"المتبقي",
+fFrom:"من شهر",fTo:"إلى شهر",fCollected:"المحصّل",fRemain:"المتبقي",fMonthRep:"عرض تقرير الشهر",fLedgerOne:"عرض سجل هذا الطالب",fLedgerAll:"عرض سجلات جميع الطلاب",
+fRepTitle:"تقرير الرسوم الشهرية",fLedTitle:"سجل رسوم الطالب",fRecTitle:"إيصال رسوم",fPeriod:"الفترة",fNoStu:"لا يوجد طلاب",
+fSaved:"يُحفظ كل إدخال تلقائياً على هذا الجهاز. اختر أي شهر لعرض سجله.",fEnter:"إدخال الرسوم",fCashier:"أمين الصندوق",chooseLogo:"اختيار الشعار",chooseBackup:"استعادة البيانات من ملف النسخة الاحتياطية",shareBk:"مشاركة النسخة الاحتياطية"}
+};
+var MN={en:["January","February","March","April","May","June","July","August","September","October","November","December"],
+ur:["جنوری","فروری","مارچ","اپریل","مئی","جون","جولائی","اگست","ستمبر","اکتوبر","نومبر","دسمبر"],
+ar:["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"]};
+var KEY="madrasa_v2",CUR=0,dmAll=false,SEL="",RM="reg",FV="m",FP="rep",FR=null;
+var F=["name","addr","cur","pex","pcl","psu","ptm","pdt","pins","mex","mcl","mse"];
+function DEF(){return{lang:"ur",dlang:"ur",dt:false,name:"",addr:"",cur:"Rs",mf:"",fees:{},rc:0,logo:"",bism:true,pex:"",pcl:"",psu:"",ptm:"",pdt:"",pins:"",mex:"",mcl:"",mse:"",subs:[],stu:[],qs:[]}}
+var S=load();
+function load(){var d=DEF();try{var r=JSON.parse(localStorage.getItem(KEY)||"null");if(r&&typeof r==="object")d=fix(r)}catch(e){}return d}
+function fix(r){var d=Object.assign(DEF(),r);
+ ["subs","stu","qs"].forEach(function(k){if(!Array.isArray(d[k]))d[k]=[]});
+ if(!D[d.lang])d.lang="ur";if(!D[d.dlang])d.dlang="ur";
+ d.subs.forEach(function(s){if(!s.id)s.id=uid()});
+ d.stu.forEach(function(t,i){if(!t.id)t.id=uid();if(!t.m||typeof t.m!=="object")t.m={};
+  ["r","n","f","a","c","b","p","ad","d","fee","nt","wd","wc","wr","wg","wn"].forEach(function(k){if(t[k]==null)t[k]=""})});
+ if(!d.fees||typeof d.fees!=="object"||Array.isArray(d.fees))d.fees={};
+ if(typeof d.rc!=="number")d.rc=0;
+ return d}
+function $(i){return document.getElementById(i)}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function esc(t){return String(t==null?"":t).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function tr(k,l){return (D[l||S.lang]&&D[l||S.lang][k])||D.en[k]||k}
+function DL(){return S.dlang}
+function dirOf(l){return l==="en"?"ltr":"rtl"}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));return true}catch(e){alert(tr("full"));return false}}
+
+/* ---------- language & tabs ---------- */
+function applyLang(){var l=S.lang,h=document.documentElement;
+ h.lang=l;h.dir=dirOf(l);document.body.className="L"+l;
+ document.querySelectorAll("[data-i]").forEach(function(e){e.textContent=tr(e.getAttribute("data-i"))});
+ document.querySelectorAll("[data-p]").forEach(function(e){e.placeholder=tr(e.getAttribute("data-p"))});
+ ["ur","ar","en"].forEach(function(x){$("lb-"+x).classList.toggle("on",x===l)});
+ document.title=tr("appTitle");$("dl").value=S.dlang;
+ $("topname").textContent=S.name||tr("appTitle");
+ rq();rm();fillCls();fillDs();rl();loadEdit();fillFeeSel();fr();renderPrev()}
+function setLang(l){S.lang=l;if(!S.dt)S.dlang=l;save();applyLang();refreshWm()}
+function setDl(v){S.dlang=v;S.dt=true;save();refreshWm();renderPrev()}
+function go(n){CUR=n;for(var i=0;i<6;i++){$("t"+i).classList.toggle("on",i===n);$("tb"+i).classList.toggle("on",i===n)}
+ if(n===2){fillCls();rm()}
+ if(n===3){fillCls();fillDs()}
+ if(n===4){loadEdit();rl()}
+ if(n===5){fillCls();fillFeeSel();if(FV==="l"&&!isYM($("lf").value))lr();else fr()}
+ renderPrev();window.scrollTo(0,0)}
+function sv(){F.forEach(function(f){S[f]=$(f).value});S.bism=$("bism").checked;save();
+ $("topname").textContent=S.name||tr("appTitle");renderPrev()}
+
+/* ---------- logo ---------- */
+function logo(inp){var f=inp.files&&inp.files[0];if(!f)return;var r=new FileReader();
+ r.onerror=function(){alert(tr("rsBad"))};
+ r.onload=function(){var im=new Image();
+  im.onerror=function(){alert(tr("rsBad"))};
+  im.onload=function(){var m=400,k=Math.min(1,m/Math.max(im.width,im.height)),c=document.createElement("canvas");
+   c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));
+   var x=c.getContext("2d");x.drawImage(im,0,0,c.width,c.height);
+   var u=c.toDataURL("image/png");
+   if(u.length>600000){x.globalCompositeOperation="destination-over";x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);u=c.toDataURL("image/jpeg",0.85)}
+   S.logo=u;save();refreshWm();renderPrev();inp.value=""};
+  im.src=r.result};
+ r.readAsDataURL(f)}
+function rmlogo(){S.logo="";save();refreshWm();renderPrev()}
+function refreshWm(){var p=$("lp");p.src=S.logo||"";p.style.display=S.logo?"block":"none";
+ var g=$("gwm");if(S.logo){g.src=S.logo;g.className="has"}else{g.removeAttribute("src");g.className=""}}
+
+/* ---------- document pieces ---------- */
+function head(title){var l=DL();
+ return '<div class="hdr">'+(S.logo?'<img class="lg" src="'+S.logo+'" alt="">':"")+
+ '<div class="hm">'+(S.bism?'<div class="bis">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>':"")+
+ '<h1>'+esc(S.name||tr("mName",l))+'</h1><div class="ad">'+esc(S.addr)+'</div></div>'+
+ (S.logo?'<span class="lgs"></span>':"")+'</div><div class="rib"><span>'+title+'</span></div>'}
+function wrap(inner,cls){var l=DL();
+ return '<div class="sheet f-'+l+' '+(cls||"")+'" dir="'+dirOf(l)+'">'+(S.logo?'<img class="wm" src="'+S.logo+'" alt="">':"")+'<div class="in">'+inner+'</div></div>'}
+function cell(lab,val){return '<td><b>'+lab+':</b> '+esc(val)+'</td>'}
+
+/* ---------- paper ---------- */
+function addQ(h){var t=$("qt").value.trim();if(!t)return;
+ S.qs.push(h?{h:1,t:t}:{t:t,m:Math.max(0,+$("qm").value||0)});
+ $("qt").value="";save();rq();renderPrev()}
+function rq(){var el=$("ql");
+ if(!S.qs.length){el.innerHTML='<p class="hint">'+esc(tr("noQ"))+'</p>';return}
+ var n=0;el.innerHTML=S.qs.map(function(q,i){var lab=q.h?"":(++n)+". ";
+  return '<div class="ql'+(q.h?" h":"")+'"><span class="t">'+lab+esc(q.t)+(q.h?"":" ("+q.m+")")+'</span>'+
+  '<button class="b s g" onclick="edQ('+i+')">✎</button><button class="b s g" onclick="mvQ('+i+',-1)">▲</button><button class="b s g" onclick="mvQ('+i+',1)">▼</button><button class="b s r" onclick="delQ('+i+')">✕</button></div>'}).join("")}
+function mvQ(i,d){var j=i+d;if(j<0||j>=S.qs.length)return;var t=S.qs[i];S.qs[i]=S.qs[j];S.qs[j]=t;save();rq();renderPrev()}
+function delQ(i){if(!confirm(tr("conf")))return;S.qs.splice(i,1);save();rq();renderPrev()}
+function edQ(i){var q=S.qs.splice(i,1)[0];if(!q)return;$("qt").value=q.t;if(!q.h)$("qm").value=q.m;save();rq();renderPrev();$("qt").focus()}
+function pp(){var l=DL(),tot=0,n=0;
+ S.qs.forEach(function(q){if(!q.h)tot+=q.m});tot=Math.round(tot*100)/100;
+ var items=S.qs.map(function(q){
+  if(q.h)return '<div class="sec"><span>'+esc(q.t)+'</span></div>';
+  n++;return '<div class="q"><div class="qn">'+n+'.</div><div class="qt">'+esc(q.t).replace(/\n/g,"<br>")+'</div><div class="qm">('+q.m+')</div></div>'}).join("");
+ var h=head(esc(S.pex||tr("pTitle",l)))+
+ '<table class="info"><tr>'+cell(tr("subj",l),S.psu)+cell(tr("cls",l),S.pcl)+cell(tr("time",l),S.ptm)+'</tr><tr>'+cell(tr("date",l),S.pdt)+cell(tr("totalM",l),tot)+'<td></td></tr></table>'+
+ (S.pins?'<div class="ins"><b>'+tr("insD",l)+':</b> '+esc(S.pins)+'</div>':"")+items+'<div class="orn">✦ ✦ ✦</div>';
+ $("pout").innerHTML=wrap(h,"")}
+
+/* ---------- subjects & students ---------- */
+function addS(){var n=$("sn").value.trim();if(!n)return;
+ var t=+$("st").value;if(!(t>0))t=100;var p=+$("sp").value;if(!(p>=0))p=0;if(p>t)p=t;
+ S.subs.push({id:uid(),n:n,t:t,p:p});$("sn").value="";save();rm();renderPrev()}
+function addT(){var n=$("nm").value.trim();if(!n)return;
+ S.stu.push(newStu({r:$("rn").value.trim()||String(S.stu.length+1),n:n,f:$("fn").value.trim(),c:S.mf||""}));
+ $("rn").value=$("nm").value=$("fn").value="";save();rm();fillDs();fillCls();rl();fillFeeSel();renderPrev()}
+function delSub(id){if(!confirm(tr("conf")))return;S.subs=S.subs.filter(function(s){return s.id!==id});save();rm();renderPrev()}
+function delStu(id){if(!id||!confirm(tr("conf")))return;S.stu=S.stu.filter(function(t){return t.id!==id});delete S.fees[id];if(SEL===id)SEL="";
+ save();rm();fillDs();fillCls();loadEdit();rl();fillFeeSel();renderPrev()}
+function rm(){
+ $("sl").innerHTML=S.subs.map(function(s){return '<span class="pill">'+esc(s.n)+' ('+s.t+' / '+s.p+') <a onclick="delSub(\''+s.id+'\')">✕</a></span>'}).join("");
+ var h='<tr><th>'+tr("roll")+'</th><th>'+tr("sname")+'</th><th>'+tr("father")+'</th>'+S.subs.map(function(s){return '<th>'+esc(s.n)+'<br><small>'+s.t+'</small></th>'}).join("")+'<th></th></tr>';
+ vis().forEach(function(t){
+  h+='<tr><td><input class="rl" value="'+esc(t.r)+'" oninput="setS(\''+t.id+'\',\'r\',this.value)"></td>'+
+  '<td><input class="nm" value="'+esc(t.n)+'" oninput="setS(\''+t.id+'\',\'n\',this.value)"></td>'+
+  '<td><input class="nm" value="'+esc(t.f)+'" oninput="setS(\''+t.id+'\',\'f\',this.value)"></td>'+
+  S.subs.map(function(s){var v=t.m[s.id];return '<td><input type="number" inputmode="decimal" step="any" min="0" max="'+s.t+'" value="'+(v==null?"":v)+'" oninput="setM(\''+t.id+'\',\''+s.id+'\',this.value,this)"></td>'}).join("")+
+  '<td><a class="x" onclick="delStu(\''+t.id+'\')">✕</a></td></tr>'});
+ $("mt").innerHTML=h}
+function findT(id){for(var i=0;i<S.stu.length;i++)if(S.stu[i].id===id)return S.stu[i];return null}
+function setS(id,k,v){var t=findT(id);if(!t)return;t[k]=v;save();fillDs();renderPrev()}
+function setM(id,sid,v,el){var t=findT(id),s=null;S.subs.forEach(function(x){if(x.id===sid)s=x});if(!t||!s)return;
+ var n=null;if(v!==""&&!isNaN(+v)){n=Math.max(0,Math.min(+v,s.t));if(n!==+v&&el)el.value=n}
+ t.m[sid]=n;save();renderPrev()}
+function grade(p,pass){if(!pass)return "F";return p>=90?"A+":p>=80?"A":p>=70?"B":p>=60?"C":p>=50?"D":"E"}
+function calc(t){var o=0,tt=0,pass=S.subs.length>0;
+ S.subs.forEach(function(s){var m=+t.m[s.id]||0;o+=m;tt+=s.t;if(m<s.p)pass=false});
+ o=Math.round(o*100)/100;var p=tt?o*100/tt:0;return{o:o,t:tt,p:p,pass:pass,g:grade(p,pass)}}
+function ranks(){var a=vis().map(function(t){return{id:t.id,o:calc(t).o}}).sort(function(x,y){return y.o-x.o}),r={};
+ a.forEach(function(x,k){r[x.id]=(k>0&&a[k-1].o===x.o)?r[a[k-1].id]:k+1});return r}
+function none(msg){return '<div class="empty">'+esc(msg)+'</div>'}
+
+/* ---------- marks sheet ---------- */
+function ms(){var l=DL(),el=$("mout");
+ if(!S.subs.length||!vis().length){el.innerHTML=none(tr("needSub"));return}
+ var rk=ranks();
+ var h=head(tr("msTitle",l))+'<table class="info"><tr>'+cell(tr("cls",l),S.mcl||S.mf)+cell(tr("exam",l),S.mex)+cell(tr("session",l),S.mse)+'</tr></table>'+
+ '<table><tr><th>'+tr("roll",l)+'</th><th>'+tr("sname",l)+'</th>'+S.subs.map(function(s){return '<th>'+esc(s.n)+'<br>('+s.t+')</th>'}).join("")+
+ '<th>'+tr("total",l)+'</th><th>%</th><th>'+tr("grade",l)+'</th><th>'+tr("pos",l)+'</th><th>'+tr("res",l)+'</th></tr>';
+ vis().forEach(function(t){var c=calc(t);
+  h+='<tr><td>'+esc(t.r)+'</td><td class="l">'+esc(t.n)+'</td>'+S.subs.map(function(s){return '<td>'+(t.m[s.id]==null?"-":t.m[s.id])+'</td>'}).join("")+
+  '<td>'+c.o+'/'+c.t+'</td><td>'+c.p.toFixed(1)+'</td><td>'+c.g+'</td><td>'+rk[t.id]+'</td><td>'+(c.pass?tr("pass",l):tr("fail",l))+'</td></tr>'});
+ h+='</table><div class="sig"><div>'+tr("tchr",l)+'</div><div>'+tr("stamp",l)+'</div><div>'+tr("head",l)+'</div></div>';
+ el.innerHTML=wrap(h,"ms"+(S.subs.length>8?" dense":""))}
+
+/* ---------- DMC ---------- */
+function fillDs(){var s=$("ds"),v=s.value;
+ s.innerHTML=vis().map(function(t){return '<option value="'+esc(t.id)+'">'+esc(t.r)+' - '+esc(t.n)+'</option>'}).join("");
+ if(vis().some(function(t){return t.id===v}))s.value=v}
+function one(t,rk){var l=DL(),c=calc(t);
+ var h=head(tr("dmcTitle",l))+'<table class="info"><tr>'+cell(tr("sname",l),t.n)+cell(tr("father",l),t.f)+'</tr><tr>'+cell(tr("roll",l),t.r)+cell(tr("cls",l),S.mcl||t.c)+'</tr><tr>'+cell(tr("exam",l),S.mex)+cell(tr("session",l),S.mse)+'</tr></table>'+
+ '<table><tr><th>'+tr("sno",l)+'</th><th>'+tr("subj",l)+'</th><th>'+tr("totalM",l)+'</th><th>'+tr("obt",l)+'</th><th>'+tr("res",l)+'</th></tr>'+
+ S.subs.map(function(s,j){var m=+t.m[s.id]||0;return '<tr><td>'+(j+1)+'</td><td class="l">'+esc(s.n)+'</td><td>'+s.t+'</td><td>'+m+'</td><td>'+(m>=s.p?tr("pass",l):tr("fail",l))+'</td></tr>'}).join("")+
+ '<tr><th colspan="2">'+tr("total",l)+'</th><th>'+c.t+'</th><th>'+c.o+'</th><th></th></tr></table>'+
+ '<div class="sum"><div><small>'+tr("pct",l)+'</small><b>'+c.p.toFixed(1)+'%</b></div><div><small>'+tr("grade",l)+'</small><b>'+c.g+'</b></div><div><small>'+tr("pos",l)+'</small><b>'+rk[t.id]+'</b></div><div><small>'+tr("res",l)+'</small><b>'+(c.pass?tr("passed",l):tr("failed",l))+'</b></div></div>'+
+ '<div class="sig"><div>'+tr("tchr",l)+'</div><div>'+tr("stamp",l)+'</div><div>'+tr("head",l)+'</div></div>';
+ return wrap(h,"")}
+function dm(){var el=$("dout");
+ var vs=vis();
+ if(!S.subs.length||!vs.length){el.innerHTML=none(tr("needSub"));return}
+ var rk=ranks();
+ if(dmAll){el.innerHTML=vs.map(function(t){return one(t,rk)}).join("");return}
+ var id=$("ds").value,t=findT(id)||vs[0];el.innerHTML=one(t,rk)}
+function renderPrev(){if(CUR===1)pp();else if(CUR===2)ms();else if(CUR===3)dm();else if(CUR===4)regPrev();else if(CUR===5)fprev()}
+
+/* ---------- helpers: dates, classes ---------- */
+function p2(n){return n<10?"0"+n:""+n}
+function today(){var d=new Date();return d.getFullYear()+"-"+p2(d.getMonth()+1)+"-"+p2(d.getDate())}
+function curYM(){return today().slice(0,7)}
+function isYM(v){return /^\d{4}-\d{2}$/.test(v||"")}
+function ymOf(d){return /^\d{4}-\d{2}/.test(d||"")?d.slice(0,7):""}
+function fmtM(k,l){return isYM(k)?MN[l][+k.slice(5,7)-1]+" "+k.slice(0,4):""}
+function months(a,b){var r=[];if(!isYM(a)||!isYM(b))return r;var y=+a.slice(0,4),m=+a.slice(5,7);
+ for(var c=0;c<240;c++){var k=y+"-"+p2(m);if(k>b)break;r.push(k);m++;if(m>12){m=1;y++}}return r}
+function elig(t,m){var a=ymOf(t.d),w=ymOf(t.wd);return (!a||a<=m)&&(!w||m<=w)}
+function vis(){return S.stu.filter(function(t){return !S.mf||t.c===S.mf})}
+function newStu(o){var t={id:uid(),r:"",n:"",f:"",m:{},a:"",c:"",b:"",p:"",ad:"",d:"",fee:"",nt:"",wd:"",wc:"",wr:"",wg:"",wn:""};
+ for(var k in o)t[k]=o[k];return t}
+function classes(){var o={};S.stu.forEach(function(t){if(t.c)o[t.c]=1});return Object.keys(o).sort()}
+function fillCls(){var o='<option value="">'+esc(tr("allCls"))+'</option>'+classes().map(function(c){return '<option value="'+esc(c)+'">'+esc(c)+'</option>'}).join("");
+ var a=$("mfc"),b=$("fcl"),vb=b.value;
+ a.innerHTML=o;a.value=S.mf||"";if(a.value!==(S.mf||"")){S.mf="";a.value=""}
+ b.innerHTML=o;b.value=vb;if(b.value!==vb)b.value=""}
+function setMf(v){S.mf=v;save();rm();fillDs();renderPrev()}
+function sigs(l,a,b,c){return '<div class="sig"><div>'+tr(a,l)+'</div><div>'+tr(b,l)+'</div><div>'+tr(c,l)+'</div></div>'}
+
+/* ---------- student register ---------- */
+function regList(){var q=($("rsq").value||"").toLowerCase(),f=$("rf").value;
+ return S.stu.filter(function(t){var w=!!t.wd;if(f==="p"&&w)return false;if(f==="w"&&!w)return false;
+  if(!q)return true;return [t.n,t.f,t.a,t.c,t.r].join(" ").toLowerCase().indexOf(q)>=0})}
+function rl(){var a=regList();
+ $("rlist").innerHTML=a.length?a.map(function(t){
+  return '<div class="ql st'+(t.id===SEL?" sel":"")+'" onclick="selStu(\''+t.id+'\')"><span class="t">'+(t.a?esc(t.a)+" · ":"")+esc(t.n)+(t.f?" <small>("+esc(t.f)+")</small>":"")+(t.c?" <small>["+esc(t.c)+"]</small>":"")+'</span><span class="bd '+(t.wd?"w":"p")+'">'+esc(t.wd?tr("fWd"):tr("fPresent"))+'</span></div>'}).join(""):none(tr("fNoStu"))}
+function addR(){var n=$("rnm").value.trim();if(!n)return;
+ var t=newStu({n:n,f:$("rfn").value.trim(),a:$("ra").value.trim(),c:$("rcl").value.trim(),r:String(S.stu.length+1)});
+ S.stu.push(t);["ra","rnm","rfn","rcl"].forEach(function(i){$(i).value=""});
+ save();fillDs();fillCls();fillFeeSel();selStu(t.id)}
+var EK=["a","n","f","r","c","b","p","ad","d","fee","nt","wd","wc","wr","wg","wn"];
+function loadEdit(){var t=findT(SEL);$("redit").style.display=t?"block":"none";if(!t)return;
+ EK.forEach(function(k){$("e_"+k).value=t[k]==null?"":t[k]});$("rtitle").textContent=t.n}
+function selStu(id){SEL=id;loadEdit();rl();renderPrev();var e=$("redit");if(e.scrollIntoView)e.scrollIntoView()}
+function setF(k,v){var t=findT(SEL);if(!t)return;t[k]=v;save();
+ if(k==="n"||k==="r")fillDs();if(k==="c")fillCls();if(k==="n")fillFeeSel();rl();renderPrev()}
+function wdToday(){var t=findT(SEL);if(!t)return;t.wd=today();if(!t.wc)t.wc=t.c;save();loadEdit();rl();renderPrev()}
+function readmit(){var t=findT(SEL);if(!t)return;t.wd=t.wc=t.wr=t.wg=t.wn="";save();loadEdit();rl();renderPrev()}
+function showReg(){RM="reg";regPrev()}
+function showCert(){if(!findT(SEL)){alert(tr("selStu"));return}RM="cert";regPrev()}
+function regPrev(){var t=findT(SEL);$("rout").innerHTML=(RM==="cert"&&t)?certSheet(t):regSheet()}
+function regSheet(){var l=DL(),a=regList(),w=a.filter(function(x){return !!x.wd}).length;
+ var h=head(esc(tr("regDocTitle",l)))+'<table class="info"><tr>'+cell(tr("fPresent",l),a.length-w)+cell(tr("fWd",l),w)+cell(tr("total",l),a.length)+'</tr></table>'+
+ '<table><tr><th>'+tr("sno",l)+'</th><th>'+tr("admNo",l)+'</th><th>'+tr("sname",l)+'</th><th>'+tr("father",l)+'</th><th>'+tr("dob",l)+'</th><th>'+tr("cls",l)+'</th><th>'+tr("admDate",l)+'</th><th>'+tr("wdDate",l)+'</th><th>'+tr("wdReason",l)+'</th><th>'+tr("wdRemarks",l)+'</th></tr>'+
+ a.map(function(t,i){return '<tr><td>'+(i+1)+'</td><td>'+esc(t.a)+'</td><td class="l">'+esc(t.n)+'</td><td class="l">'+esc(t.f)+'</td><td>'+esc(t.b)+'</td><td>'+esc(t.c)+'</td><td>'+esc(t.d)+'</td><td>'+esc(t.wd)+'</td><td class="l">'+esc(t.wr)+'</td><td class="l">'+esc(t.wn)+'</td></tr>'}).join("")+
+ '</table>'+sigs(l,"tchr","stamp","head");
+ return wrap(h,"ms"+(a.length>14?" dense":""))}
+function cellc(lab,val){return '<td colspan="2"><b>'+lab+':</b> '+esc(val)+'</td>'}
+function certSheet(t){var l=DL();
+ var h=head(esc(tr("certTitle",l)))+'<table class="info"><tr>'+cell(tr("sname",l),t.n)+cell(tr("father",l),t.f)+'</tr><tr>'+cell(tr("admNo",l),t.a)+cell(tr("dob",l),t.b)+'</tr><tr>'+
+ cell(tr("admDate",l),t.d)+cell(tr("wdCls",l),t.wc||t.c)+'</tr><tr>'+cell(tr("wdDate",l),t.wd)+cell(tr("wdConduct",l),t.wg)+'</tr><tr>'+
+ cellc(tr("wdReason",l),t.wr)+'</tr><tr>'+cellc(tr("wdRemarks",l),t.wn)+'</tr></table>'+sigs(l,"tchr","stamp","head");
+ return wrap(h,"")}
+
+/* ---------- fees ---------- */
+function fnum(n){return String(Math.round((+n||0)*100)/100)}
+function stuFee(t){var n=+t.fee;return n>0?n:0}
+function rec(t,m){var r=S.fees[t.id]&&S.fees[t.id][m];
+ if(r)return{due:+r.due||0,paid:+r.paid||0,date:r.date||"",rcpt:r.rcpt||"",note:r.note||""};
+ return{due:stuFee(t),paid:0,date:"",rcpt:"",note:""}}
+function stat(x){return x.due>0&&x.paid>=x.due?"g":x.paid>0?"o":x.due>0?"r":"n"}
+function statTxt(x,l){var s=stat(x);return s==="g"?tr("stPaid",l):s==="o"?tr("stPart",l):s==="r"?tr("stUnpaid",l):"-"}
+function mkRec(t,m){if(!S.fees[t.id])S.fees[t.id]={};if(!S.fees[t.id][m])S.fees[t.id][m]={due:stuFee(t),paid:0,date:"",rcpt:"",note:""};return S.fees[t.id][m]}
+function fcls(){var c=$("fcl").value;return S.stu.filter(function(t){return !c||t.c===c})}
+function fmv(){var v=$("fm").value;return isYM(v)?v:curYM()}
+function frows(){var out=[];
+ if(FV==="m"){var m=fmv();fcls().forEach(function(t){if(elig(t,m))out.push({t:t,m:m})})}
+ else{var t=findT($("fs").value);if(t)months($("lf").value,$("lt").value).forEach(function(k){if(elig(t,k))out.push({t:t,m:k})})}
+ return out}
+function setFee(sid,m,k,v){var t=findT(sid);if(!t)return;var r=mkRec(t,m);
+ if(k==="due"||k==="paid")r[k]=(v===""||isNaN(+v))?0:Math.max(0,+v);else r[k]=v;
+ save();upd(t,m);fprev()}
+function upd(t,m){var x=rec(t,m),b=$("b_"+t.id+"_"+m),s=$("s_"+t.id+"_"+m);
+ if(b)b.textContent=fnum(x.due-x.paid);if(s){s.textContent=statTxt(x);s.className="sx "+stat(x)}ftotals()}
+function fr(){var rows=frows(),cu=S.cur?" ("+esc(S.cur)+")":"";
+ var h='<tr><th>'+(FV==="m"?tr("sname"):tr("fMonth"))+'</th><th>'+tr("fDue")+cu+'</th><th>'+tr("fPaid")+cu+'</th><th>'+tr("fDate")+'</th><th>'+tr("fRcpt")+'</th><th>'+tr("fBal")+'</th><th>'+tr("status")+'</th><th>'+tr("notes")+'</th><th></th></tr>';
+ rows.forEach(function(r){var t=r.t,x=rec(t,r.m),a="'"+t.id+"','"+r.m+"'",id=t.id+"_"+r.m;
+  var lab=FV==="m"?esc(t.r)+" - "+esc(t.n)+(t.c?"<br><small>"+esc(t.c)+"</small>":""):esc(fmtM(r.m,S.lang));
+  h+='<tr><td style="text-align:start">'+lab+'</td>'+
+  '<td><input type="number" inputmode="decimal" step="any" min="0" value="'+x.due+'" oninput="setFee('+a+',\'due\',this.value)"></td>'+
+  '<td><input type="number" inputmode="decimal" step="any" min="0" value="'+(x.paid?x.paid:"")+'" oninput="setFee('+a+',\'paid\',this.value)"></td>'+
+  '<td><input type="date" class="dt" value="'+esc(x.date)+'" onchange="setFee('+a+',\'date\',this.value)"></td>'+
+  '<td><input class="w" value="'+esc(x.rcpt)+'" oninput="setFee('+a+',\'rcpt\',this.value)"></td>'+
+  '<td id="b_'+id+'">'+fnum(x.due-x.paid)+'</td><td id="s_'+id+'" class="sx '+stat(x)+'">'+esc(statTxt(x))+'</td>'+
+  '<td><input class="w" value="'+esc(x.note)+'" oninput="setFee('+a+',\'note\',this.value)"></td>'+
+  '<td><button class="b s" onclick="fpay('+a+')">✓</button> <button class="b s g" onclick="frc('+a+')">🧾</button></td></tr>'});
+ $("ft").innerHTML=rows.length?h:'<tr><td>'+esc(tr("fNoStu"))+'</td></tr>';ftotals()}
+function ftotals(){var d=0,p=0;frows().forEach(function(r){var x=rec(r.t,r.m);d+=x.due;p+=x.paid});
+ $("ftot").textContent=tr("fDue")+": "+fnum(d)+"  |  "+tr("fCollected")+": "+fnum(p)+"  |  "+tr("fRemain")+": "+fnum(d-p)}
+function fpay(sid,m){var t=findT(sid);if(!t)return;var r=mkRec(t,m);if(!(r.due>0))return;r.paid=r.due;if(!r.date)r.date=today();
+ if(!r.rcpt){S.rc=(S.rc||0)+1;r.rcpt=String(S.rc)}save();fr();fprev()}
+function frc(sid,m){FR={sid:sid,m:m};FP="rc";fprev();var e=$("fout");if(e.scrollIntoView)e.scrollIntoView()}
+function fillFeeSel(){var s=$("fs"),v=s.value;
+ s.innerHTML=S.stu.map(function(t){return '<option value="'+esc(t.id)+'">'+esc(t.r)+' - '+esc(t.n)+'</option>'}).join("");
+ if(S.stu.some(function(t){return t.id===v}))s.value=v;else if(S.stu.length)s.value=S.stu[0].id}
+function lr(){var t=findT($("fs").value);
+ if(t){var ks=Object.keys(S.fees[t.id]||{}).sort();$("lf").value=ymOf(t.d)||ks[0]||curYM().slice(0,4)+"-01";$("lt").value=ymOf(t.wd)||curYM()}
+ fr();fprev()}
+function setFV(v){FV=v;FP=v==="m"?"rep":"led";
+ $("fmc").style.display=v==="m"?"block":"none";$("flc").style.display=v==="l"?"block":"none";$("fvr").style.display=v==="m"?"inline-block":"none";
+ $("fvm").className="b"+(v==="m"?"":" g");$("fvl").className="b"+(v==="l"?"":" g");
+ if(v==="l")lr();else{fr();fprev()}}
+function fprev(){if(CUR!==5)return;var h="";
+ if(FP==="rc"&&FR){var t=findT(FR.sid);h=t?receipt(t,FR.m):""}
+ else if(FP==="all")h=fcls().map(function(t){return ledSheet(t)}).join("");
+ else if(FP==="led")h=ledSheet(findT($("fs").value));
+ else h=repSheet();
+ $("fout").innerHTML=h||none(tr("fNoStu"))}
+function curS(){return S.cur?" ("+esc(S.cur)+")":""}
+function repSheet(){var l=DL(),m=fmv(),rows=frows();if(!rows.length)return "";var d=0,p=0,cu=curS();
+ var h=head(esc(tr("fRepTitle",l))+" — "+esc(fmtM(m,l)))+'<table class="info"><tr>'+cell(tr("cls",l),$("fcl").value||tr("allCls",l))+cell(tr("fMonth",l),fmtM(m,l))+'</tr></table>'+
+ '<table><tr><th>'+tr("sno",l)+'</th><th>'+tr("sname",l)+'</th><th>'+tr("father",l)+'</th><th>'+tr("cls",l)+'</th><th>'+tr("fDue",l)+cu+'</th><th>'+tr("fPaid",l)+cu+'</th><th>'+tr("fDate",l)+'</th><th>'+tr("fRcpt",l)+'</th><th>'+tr("fBal",l)+'</th><th>'+tr("status",l)+'</th></tr>';
+ rows.forEach(function(r,i){var t=r.t,x=rec(t,r.m);d+=x.due;p+=x.paid;
+  h+='<tr><td>'+(i+1)+'</td><td class="l">'+esc(t.n)+'</td><td class="l">'+esc(t.f)+'</td><td>'+esc(t.c)+'</td><td>'+fnum(x.due)+'</td><td>'+fnum(x.paid)+'</td><td>'+esc(x.date)+'</td><td>'+esc(x.rcpt)+'</td><td>'+fnum(x.due-x.paid)+'</td><td class="sx '+stat(x)+'">'+esc(statTxt(x,l))+'</td></tr>'});
+ h+='<tr><th colspan="4">'+tr("total",l)+'</th><th>'+fnum(d)+'</th><th>'+fnum(p)+'</th><th colspan="2"></th><th>'+fnum(d-p)+'</th><th></th></tr></table>'+sigs(l,"fCashier","stamp","head");
+ return wrap(h,"ms"+(rows.length>14?" dense":""))}
+function ledSheet(t){if(!t)return "";var l=DL(),a=$("lf").value,b=$("lt").value,d=0,p=0,cu=curS();
+ var ml=months(a,b).filter(function(m){return elig(t,m)});
+ var h=head(esc(tr("fLedTitle",l)))+'<table class="info"><tr>'+cell(tr("sname",l),t.n)+cell(tr("father",l),t.f)+'</tr><tr>'+cell(tr("admNo",l),t.a)+cell(tr("cls",l),t.c)+'</tr><tr>'+
+ cell(tr("mfee",l),fnum(stuFee(t)))+cell(tr("fPeriod",l),fmtM(a,l)+" - "+fmtM(b,l))+'</tr></table>'+
+ '<table><tr><th>'+tr("sno",l)+'</th><th>'+tr("fMonth",l)+'</th><th>'+tr("fDue",l)+cu+'</th><th>'+tr("fPaid",l)+cu+'</th><th>'+tr("fDate",l)+'</th><th>'+tr("fRcpt",l)+'</th><th>'+tr("fBal",l)+'</th><th>'+tr("status",l)+'</th></tr>';
+ ml.forEach(function(m,i){var x=rec(t,m);d+=x.due;p+=x.paid;
+  h+='<tr><td>'+(i+1)+'</td><td>'+esc(fmtM(m,l))+'</td><td>'+fnum(x.due)+'</td><td>'+fnum(x.paid)+'</td><td>'+esc(x.date)+'</td><td>'+esc(x.rcpt)+'</td><td>'+fnum(x.due-x.paid)+'</td><td class="sx '+stat(x)+'">'+esc(statTxt(x,l))+'</td></tr>'});
+ h+='<tr><th colspan="2">'+tr("total",l)+'</th><th>'+fnum(d)+'</th><th>'+fnum(p)+'</th><th colspan="2"></th><th>'+fnum(d-p)+'</th><th></th></tr></table>'+
+ '<div class="sum"><div><small>'+tr("fDue",l)+'</small><b>'+fnum(d)+'</b></div><div><small>'+tr("fCollected",l)+'</small><b>'+fnum(p)+'</b></div><div><small>'+tr("fRemain",l)+'</small><b>'+fnum(d-p)+'</b></div></div>'+
+ sigs(l,"fCashier","stamp","head");
+ return wrap(h,"")}
+function receipt(t,m){var l=DL(),x=rec(t,m),c=S.cur?" "+S.cur:"";
+ var h=head(esc(tr("fRecTitle",l)))+'<table class="info"><tr>'+cell(tr("fRcpt",l),x.rcpt)+cell(tr("fDate",l),x.date)+'</tr><tr>'+cell(tr("sname",l),t.n)+cell(tr("father",l),t.f)+'</tr><tr>'+
+ cell(tr("cls",l),t.c)+cell(tr("fMonth",l),fmtM(m,l))+'</tr><tr>'+cell(tr("fDue",l),fnum(x.due)+c)+cell(tr("fPaid",l),fnum(x.paid)+c)+'</tr><tr>'+
+ cell(tr("fBal",l),fnum(x.due-x.paid)+c)+cell(tr("status",l),statTxt(x,l))+'</tr></table>'+sigs(l,"fCashier","stamp","head");
+ return wrap(h,"rc")}
+
+/* ---------- print & backup ---------- */
+function pr(){var o=document.title,names=["tSetup","tPaper","tMarks","tDmc","tReg","tFee"];
+ document.title=(S.name||"Madrasa")+" - "+tr(names[CUR],DL());
+ window.onafterprint=function(){document.title=o;window.onafterprint=null};
+ window.print()}
+function bk(){var a=document.createElement("a");
+ a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:"application/json"}));
+ a.download="madrasa-backup.json";document.body.appendChild(a);a.click();document.body.removeChild(a)}
+function shareBk(){var s=JSON.stringify(S),n="madrasa-backup.json";
+ try{var f=new File([s],n,{type:"application/json"});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:S.name||tr("appTitle")}).catch(function(){});return}}catch(e){}
+ bk()}
+function rs(inp){var f=inp.files&&inp.files[0];if(!f)return;var r=new FileReader();
+ r.onload=function(){try{var o=JSON.parse(r.result);if(!o||typeof o!=="object")throw 0;S=fix(o);save();init();alert(tr("rsOk"))}catch(e){alert(tr("rsBad"))}inp.value=""};
+ r.readAsText(f)}
+function init(){F.forEach(function(f){$(f).value=S[f]||""});$("bism").checked=!!S.bism;
+ if(!isYM($("fm").value))$("fm").value=curYM();
+ refreshWm();applyLang()}
+init();
+</script>
+</body>
+</html>
